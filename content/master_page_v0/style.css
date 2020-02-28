@@ -1,0 +1,25 @@
+.container {
+  background-color: #ccc;
+  padding: 5px;
+}
+
+.title {
+  font-size: 14pt;
+}
+
+.content {
+  font-size: 9pt;
+}
+
+.link {
+  font-size: 13pt;
+}
+
+#menu0 {
+  position: absolute;
+  left : 0px;
+  top : 0px;
+  height:400px;
+  width:150px;
+  background-color: red;
+}

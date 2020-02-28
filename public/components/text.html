@@ -1,0 +1,30 @@
+<html>
+<style>
+  #txt {
+    width:100%;
+    height:100%;
+    background-color: #999;
+    color: #fff;
+    font-size: 40px;
+
+  }
+</style>
+  <script>
+
+    window.onload = ()=>{
+      var N = 0;
+      var div = document.getElementById("txt");
+      setInterval(()=>{
+        div.innerHTML += Math.floor(Math.random()*10)+" ";
+        N = (N+1)%250;
+        if (N==0) {
+          div.innerHTML = "";
+        }
+      }, 1);
+    }
+  </script>
+
+  <body id="body">
+    <div id="txt"></div>
+  </body>
+</html>

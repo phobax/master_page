@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+
+  <body>
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <script type="text/javascript" src="gg_util_perlin.js"></script>
+    <script type="text/javascript" src="gg_util_functions.js"></script>
+
+    <script>
+
+
+		var canvas = document.getElementById("myCanvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+		var context = canvas.getContext('2d');
+		var frameCount = 0;
+
+    var t = 0;
+
+
+
+    window.onresize = ()=>{
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function setBrightness (b) {
+      b = Math.round(b);
+      context.fillStyle = "rgb("+b+", "+b+", "+b+")";
+    }
+
+    function setColor (r, g, b) {
+
+      r = Math.round(r);
+      g = Math.round(g);
+      b = Math.round(b);
+      context.fillStyle = "rgb("+r+", "+g+", "+b+")";
+    }
+
+    function setColorHSL (h, s, l) {
+      h = Math.round(h);
+      s = s+"%";
+      l = l+"%";
+
+      context.fillStyle = "hsl("+h+","+s+","+l+")";
+    }
+
+    function blend3 (v0, v1, t) {
+      return {
+        x : blend(v0.x, v1.x, t),
+        y : blend(v0.y, v1.y, t),
+        z : blend(v0.z, v1.z, t)
+      }
+    }
+
+    function drawSquares() {
+      var N = 250;
+      var w = canvas.width / N;
+      var h = canvas.height / N;
+
+      for (var i=0; i<N; i++) {
+        for (var j=0; j<N; j++) {
+          var x = canvas.width * i / N;
+          var y = canvas.height * j / N;
+
+          // angle
+          var f = 0.02;
+          var f2 = 0.04;
+
+
+          // calc height in range 0..1
+
+
+          context.fillRect(x, y, w, h);
+        }
+      }
+    }
+
+    var setup = function() {
+
+    }
+
+    var update = function() {
+      t = performance.now() / 1000.0;
+    }
+
+    var draw = function() {
+
+      context.fillStyle = "rgba(0,0,0,1)"
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (var i=0; i<45; i++) {
+        var color1 = {
+          x : Math.round(Math.random()*255),
+          y : 255,
+          z : 255
+        }
+
+
+        setColor(color1.x, color1.y, color1.z);
+        context.fillRect(i*20,0,20,canvas.height);
+      }
+
+      requestAnimationFrame(draw);
+    };
+
+    setup();
+    draw();
+
+    </script>
+
+  </body>
+
+</html>

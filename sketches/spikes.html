@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+
+   <style>
+    body {
+      background-color: black;
+    }
+   </style>
+   <body>
+      <script src="/gl_screen.js"></script>
+      <script src="/gl_shader.js"></script>
+      <script src="/util.js"></script>
+      <script src="/audio.js"></script>
+
+      <script>
+
+
+
+      class Osc {
+        constructor(f=200) {
+          this.f = f * Math.PI * 2;
+          this.phase = 0;
+          this.value = 0;
+        }
+
+        update (dp) {
+          this.phase += (dp * this.f);
+          this.value = Math.sin(this.phase);
+        }
+      }
+
+
+      var shader, screen;
+      var vertCode, fragCode;
+      var N_SCREENS = 1;
+      var screens = [];
+      var time = 0;
+      var lastTime = 0;
+      var BUFSIZE = 256;
+      var FS = 44100;
+      var dT = 1. / FS;
+      var N_OSC = 4;
+
+      var oscillators = [];
+
+      for (var i=0; i<N_OSC; i++) {
+        oscillators.push(new Osc(200));
+      }
+
+
+
+
+      var audio = new Audio(BUFSIZE);
+
+
+
+
+      audio.onAudioLoop = () => {
+        var data = [[],[]];
+        for (var i of Array(BUFSIZE).keys()) {
+
+          var v = 0;
+          for (osc of oscillators) {
+            v += osc.value;
+            osc.update(dT);
+          }
+          v /= oscillators.length;
+          v=0;
+          data[0][i] = v;
+          data[1][i] = v;
+
+        }
+        return data;
+      }
+
+      function animate() {
+        var elapsed = 0;
+        var timeNow = new Date().getTime();
+
+        if (lastTime != 0) {
+          elapsed = (timeNow - lastTime) / 1000.;
+        }
+        lastTime = timeNow;
+
+        shader.FRQ[0] = Math.sin(time)*100+100;
+        shader.FRQ[1] = 200;
+        shader.FRQ[2] = 210;
+        shader.FRQ[3] = 220;
+
+        oscillators[0].f = shader.FRQ[0] * Math.PI * 2;
+        oscillators[1].f = shader.FRQ[1] * Math.PI * 2;
+        oscillators[2].f = shader.FRQ[2] * Math.PI * 2;
+        oscillators[3].f = shader.FRQ[3] * Math.PI * 2;
+
+
+
+
+        for (var i=0; i<N_SCREENS; i++) {
+          var screen = screens[i];
+          screen.shader.uTime = time;
+          screen.uTime = time;
+          screen.draw();
+        }
+
+        time += elapsed;
+        requestAnimationFrame(animate);
+     }
+
+
+    function init() {
+
+      W = 1400;
+      H = 1000;
+
+      screen = new Screen (0, 0, W, H, 0, 0);
+      shader = new Shader(fragCode, vertCode, screen.gl);
+      shader.addUniform("fSpiral", 10.);
+      shader.addUniform("uTime", 1.);
+      shader.addUniform("N_OSC", 4.);
+      shader.addUniform("FRQ", [200, 100, 250, 150]);
+
+      screen.addShader(shader)
+      screens.push(screen);
+
+
+      animate();
+    }
+
+    window.onload = function() {
+      get("/fshader0.glsl")
+      .then(ret=>{
+        fragCode = ret;
+        get("/vshader0.glsl")
+        .then(ret=>{
+          vertCode = ret;
+          init();
+        })
+      })
+    }
+
+
+      </script>
+
+
+    </body>
+</html>

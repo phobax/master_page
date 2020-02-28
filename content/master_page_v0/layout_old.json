@@ -1,0 +1,20 @@
+{
+  "menu0" : {
+    "id" : "menu0",
+    "template" : "menu",
+    ".entries" : [
+      {"template" : "link", "id":"goto1", ".link" : "goto -> 1"},
+      {"template" : "link", "id":"goto2", ".link" : "goto -> 2"},
+      {"template" : "link", "id":"goto3", ".link" : "goto -> 3"}
+    ]
+  },
+
+  "x1" : {
+    "id" : "x1",
+    "template" : "xxx",
+    ".title" : "this 22222",
+    ".content" : "content content content"
+  },
+
+  
+}

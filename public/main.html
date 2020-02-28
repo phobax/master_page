@@ -1,0 +1,47 @@
+<html>
+  <style>
+
+    .large {
+      width:800px;
+      height:800px;
+    }
+    
+    #nav {
+      background-color:#ccc;
+      height:100%;
+      width:20%;
+      position: absolute;
+      left:0%;
+      top:0%;
+    }
+
+    #content {
+      background-color:#cfc;
+      height:100%;
+      width:80%;
+      position: absolute;
+      left:20%;
+      top:0%;
+    }
+  </style>
+
+  <script>
+
+  Promise.all([get("/backend/layout"), get("/backend/template", null, "text/html"), get("/backend/css")])
+  .then(ret=>{
+
+    var body = document.getElementById("body");
+    for (var i=0; i<30;i++) {
+
+      // body.appendChild();
+    }
+  })
+  .catch(err=>{
+    console.log(err);
+  })
+
+  </script>
+
+<body id="body"></body>
+
+</html>

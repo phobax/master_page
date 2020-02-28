@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #bbb;
+        font-size : 4em;
+      }
+      .entry {
+        background-color : #cca;
+        margin-left:10px;
+        width:200px;
+        position:absolute;
+        top:0px;
+        left:0px;
+      }
+    </style>
+
+    <script>
+
+      var entries = [];
+
+      window.onload = ()=>{
+
+        var x = 0;
+        var dat = ["visual", "sound", "comp"];
+        var body = document.getElementById("body");
+        for (var d of dat) {
+          var c = document.createElement("div");
+          c.classList.add("entry");
+          c.innerHTML = d;
+          c.id = d;
+          c.style.left = x;//+"px";
+
+          c.addEventListener("click", (e)=>{
+            for (var entry of entries) {
+              var x = entry.style.left.split("px")[0]+2;
+              entry.style.left = x+"px";
+            }
+            console.log(e.target.id);
+          })
+          x += 250;
+          entries.push(c);
+          body.appendChild(c);
+        }
+      }
+    </script>
+  </head>
+
+  <body id="body">
+
+  </body>
+</html>

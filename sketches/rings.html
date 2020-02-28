@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+   <style>
+    body {
+      background-color: black;
+    }
+   </style>
+   <body>
+      <script src="gl_screen.js"></script>
+      <script src="gl_shader.js"></script>
+      <script>
+
+
+      var vertCode =
+         'attribute vec3 coordinates;' +
+
+         'void main(void) {' +
+            'gl_Position = vec4(coordinates, 1.0);' +
+         '}';
+
+      var fragCode =
+         'precision mediump float;'+
+         'uniform float uTime;'+
+         'uniform float uI;'+
+         'uniform float uJ;'+
+         'uniform float fSpiral;'+
+         ''+
+         ''+
+         ''+
+         ''+
+         'vec2 center = vec2(500.,500.);'+
+         'void main(void) {' +
+            'float b = 0.0;'+
+            'for (float i=0.; i<10.; i++) {'+
+            'float r = distance(gl_FragCoord.xy, center+vec2(sin(uTime*0.4+i*0.2)*200.0,0.0));'+
+            'float d = distance(r,sin(uTime+i*0.3)*220.+220.);'+
+            'd += 4.*sin(gl_FragCoord.x*0.2*uTime*i);'+
+            'if (d>3.0)d=3.0; d = 3.-d;'+
+            'd = sin(d/10.*1.571);'+
+            'b+=d;'+
+            '}'+
+            ' gl_FragColor = vec4(b, b, b, 1.0);' +
+         '}';
+
+
+      var N_SCREENS = 1;
+      var screens = [];
+
+       var time = 0;
+       var lastTime = 0;
+
+       function animate() {
+         var elapsed = 0;
+        var timeNow = new Date().getTime();
+        if (lastTime != 0) {
+          elapsed = (timeNow - lastTime) / 1000.;
+        }
+        lastTime = timeNow;
+
+        for (var i=0; i<N_SCREENS; i++) {
+          var screen = screens[i];
+          screen.shader.uTime = time;
+          screen.uTime = time;
+          screen.draw();
+        }
+
+
+        time += elapsed;
+        requestAnimationFrame(animate);
+       }
+
+       window.onload = function() {
+
+         W = 1400;
+         H = 1400;
+
+         var screen = new Screen (0, 0, W, H, 0, 0);
+
+         var shader = new Shader(fragCode, vertCode, screen.gl);
+         shader.addUniform("fSpiral", 10.);
+         shader.addUniform("uTime", 1.);
+
+         screen.addShader(shader)
+         screens.push(screen);
+
+
+
+         animate();
+       }
+
+
+      </script>
+
+
+    </body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "layout" : "tiles",
+  "components" : [
+    {"type":"menu", "size":["100%","100%"]},
+    {"type":"random", "resize" : true},
+    {"type":"random", "resize" : true},
+    {"type":"random", "resize" : true},
+    {"type":"random", "resize" : true},
+    {"type":"canvas", "resize" : true},
+    {"type":"random", "resize" : true},
+    {"type":"canvas", "resize" : true},
+    {"type":"random", "resize" : true},
+    {"type":"random", "resize" : true},
+    {"type":"text", "resize" : true},
+    {"type":"random", "resize" : true},
+    {"type":"random", "resize" : true}
+  ]
+}
