@@ -1,3 +1,7 @@
+function parseUrl() {
+  return window.location.pathname.substring(1).split("/");
+}
+
 function getUrlParams() {
     var params = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -145,4 +149,4 @@ class Counter {
     return  R * c;
   }
 
-export {getUrlParams, post, get}
+export {parseUrl, getUrlParams, post, get}

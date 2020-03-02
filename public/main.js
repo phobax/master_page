@@ -48,83 +48,126 @@ function createDiv (elem) {
 }
 
 
+var components = {};
 
-get("/backend/layout")
-.then(ret=>{
 
-  var body = document.getElementById("body");
 
-  var layout = JSON.parse(ret);
-  // var component_types = {};
-  //
-  //
-  // for (var component of layout.components) {
-  //   component_types[component.type] = 0;
-  // }
-  //
-  // var html_calls = [];
-  // for (var type of Object.keys(component_types)) {
-  //   html_calls.push(get("/backend/component/"+type));
-  // }
-  //
-  // Promise.all(html_calls)
-  // .then(ret=>{
+function test() {
+  var obj = document.createElement("object");
+  obj.classList.add("component");
+  obj.setAttribute("type", "text/html");
+  obj.setAttribute("data", "/components/menu.html");
+  document.getElementById("body").appendChild(obj)
+  obj.addEventListener("load",(e)=>{
+    console.log(e.target.querySelector(".test"));
+  })
+}
 
-    for (var component of layout.components) {
+function init() {
 
-      var div = document.createElement("object");
-      div.classList.add("component");
-      div.setAttribute("type", "text/html");
-      div.setAttribute("data", "/components/"+component.type+".html");
+  var header = document.getElementById("header");
 
-      if ("size" in component) {
-        div.style["width"] = component.size[0];
-        div.style["height"] = component.size[1];
-      }
-      else {
-        div.style["width"] = "500px";
-        div.style["height"] = "500px";
-      }
-      div.style["transition"] =["width 0.7s, height 0.7s"];
-      // div.style["float"] = "top";
+  test();
 
-      if (component.resize) {
-        div.addEventListener("mouseover", (e)=>{
-          e.preventDefault();
-          e.target.style.width = "800px";
-          e.target.style.height = "800px";
+  get("/backend/layout")
+  .then(ret=>{
+
+    var body = document.getElementById("body");
+
+    var layout = JSON.parse(ret);
+    // var component_types = {};
+    //
+    //
+    // for (var component of layout.components) {
+    //   component_types[component.type] = 0;
+    // }
+    //
+    // var html_calls = [];
+    // for (var type of Object.keys(component_types)) {
+    //   html_calls.push(get("/backend/component/"+type));
+    // }
+    //
+    // Promise.all(html_calls)
+    // .then(ret=>{
+
+
+      for (var component of layout.components) {
+
+        components[component.id] = component;
+        var container = document.createElement("div");
+        container.classList.add("section", "feature");
+        container.id = component.id;
+        container.addEventListener("click", (e)=>{
+          window.location = "/show/component/"+components[e.target.id].type;
         })
 
-        div.addEventListener("mouseout", (e)=>{
-          e.preventDefault();
-          e.target.style.width = "500px";
-          e.target.style.height = "500px";
-        })
+        var obj = document.createElement("object");
+        obj.classList.add("component");
+        obj.setAttribute("type", "text/html");
+        obj.setAttribute("data", "/components/"+component.type+".html");
+
+        // obj.classList.add("section", "feature")
+        obj.addEventListener("click",()=>{
+
+        });
+
+
+        // if ("size" in component) {
+        //   div.style["width"] = component.size[0];
+        //   div.style["height"] = component.size[1];
+        // }
+        // else {
+        //   div.style["width"] = "500px";
+        //   div.style["height"] = "500px";
+        // }
+        // div.style["transition"] =["width 0.7s, height 0.7s"];
+        // div.style["float"] = "top";
+
+        // if (component.resize) {
+        //   div.addEventListener("mouseover", (e)=>{
+        //     e.preventDefault();
+        //     e.target.style.width = "800px";
+        //     e.target.style.height = "800px";
+        //   })
+        //
+        //   div.addEventListener("mouseout", (e)=>{
+        //     e.preventDefault();
+        //     e.target.style.width = "500px";
+        //     e.target.style.height = "500px";
+        //   })
+        // }
+        // div.innerHTML = ret[0];
+        container.appendChild(obj);
+
+
+        document.getElementById("features").appendChild(container);
+        // div.appendChild(container);
       }
-      // div.innerHTML = ret[0];
-      body.appendChild(div);
-    }
 
-  // })
-  // .catch(err=>{
-  //   console.log(err);
-  // })
-/*
-  document.getElementById("templates").innerHTML = ret[1];
-  var layout = JSON.parse(ret[0]);
-  var css = ret[2];
+    // })
+    // .catch(err=>{
+    //   console.log(err);
+    // })
+  /*
+    document.getElementById("templates").innerHTML = ret[1];
+    var layout = JSON.parse(ret[0]);
+    var css = ret[2];
 
-  var style = document.createElement('style');
-  style.innerHTML = css;
-  document.head.appendChild(style);
-*/
+    var style = document.createElement('style');
+    style.innerHTML = css;
+    document.head.appendChild(style);
+  */
 
 
 
-  //
-  //
-  // var body = document.getElementById("body");
-  //
-  // createDivs(body, layout);
+    //
+    //
+    // var body = document.getElementById("body");
+    //
+    // createDivs(body, layout);
 
-})
+  })
+}
+
+
+init();

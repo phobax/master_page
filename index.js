@@ -28,6 +28,14 @@ ioserver.on("connection", socket=> {
 app.use(cors());
 app.use ("/", express.static(__dirname+"/public"))
 
+
+app.route ("/show/component/:component")
+.get(function (req, res) {
+  res.sendFile(__dirname+"/public/showcomponent.html")
+})
+
+
+
 app.route ("/backend/:cmd")
 .get(function (req, res) {
 
