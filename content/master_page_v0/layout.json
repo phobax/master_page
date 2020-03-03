@@ -1,18 +1,6 @@
 {
   "layout" : "tiles",
   "components" : [
-    {"type":"menu", "size":["100%","100%"], "id":"menu"},
-    {"type":"random", "resize" : true, "id":"r0"},
-    {"type":"random", "resize" : true, "id":"r1"},
-    {"type":"random", "resize" : true, "id":"r2"},
-    {"type":"random", "resize" : true, "id":"r3"},
-    {"type":"canvas", "resize" : true, "id":"c0"},
-    {"type":"random", "resize" : true, "id":"r4"},
-    {"type":"canvas", "resize" : true, "id":"c1"},
-    {"type":"random", "resize" : true, "id":"r5"},
-    {"type":"random", "resize" : true, "id":"r6"},
-    {"type":"text",   "resize" : true, "id":"t0"},
-    {"type":"random", "resize" : true, "id":"r7"},
-    {"type":"random", "resize" : true, "id":"r8"}
+    {"type":"canvas", "resize" : true, "id":"c0", "customElement" : "gg-canvas"}
   ]
 }

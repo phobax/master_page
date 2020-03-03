@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+
+  <script src="gg_util.js"></script>
+  <script src="gg_perlin.js"></script>
+  <script src="gg_canvas.js"></script>
+  <script src="gg_drawing.js"></script>
+  <script src="gg_cellular.js"></script>
+
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+  </style>
+  <script>
+
+
+    var context;
+    window.onload = init;
+
+
+    var time = 0;
+
+    var img;
+    var carenImageData;
+
+    var W = 800;
+    var H = 800;
+    var cell = [];
+    var center = new gg_util.Vec2(-5000,-5000);
+
+
+    function init() {
+      context = gg_canvas.createCanvas(document.getElementById("body"), 2000, 1000);
+      gg_drawing.init(context);
+
+      gg_canvas.image("FontomType-SkyhookMono.gif")
+      .then (ret=>{
+        img = ret.image;
+        // gg_canvas.image("caren_90er.jpg")
+        gg_canvas.image("karen_italia.jpg")
+        .then (ret=>{
+          carenImageData = ret.imageData;
+          W = carenImageData.width;
+          H = carenImageData.height;
+          draw();
+        })
+      })
+
+
+
+
+      for (var i=0; i<W; i+=1) {
+        cell[i] = [];
+        for (var j=0; j<H; j+=1) {
+          var d = gg_util.dist2(new gg_util.Vec2(i,j), center);
+          var lg = -Math.log(1/(d*0.001+0.7));
+          cell[i][j] = (gg_cellular.value((i-100)*0.0002, j*0.0002,1)-gg_cellular.value(i*0.0002,j*0.0002,0))*100*lg;
+        }
+      }
+    }
+
+
+    function text (str) {
+      for (var i=0; i<str.length; i++) {
+        gg_canvas.drawSprite (img, 400+i*40, 400,  40, 60, (ind, w, h)=>{return [Math.floor((ind%9)*w/9), Math.floor(ind/9)*h/3, w/9, h/3]}, [str.charCodeAt(i)-97, img.width, img.height]);
+      }
+    }
+
+
+    function draw() {
+
+      gg_canvas.fill(0,0,0);
+      context.fillRect(0,0,2000,1000);
+
+      for (var i=0; i<W; i+=2) {
+        for (var j=0; j<H; j+=2) {
+
+          var rgb = [carenImageData.data[(j*W+i)*4], carenImageData.data[(j*W+i)*4+1], carenImageData.data[(j*W+i)*4+2]]
+
+          // rgb[0] *= cell[i][j];
+          // rgb[1] *= cell[i][j];
+          // rgb[2] *= cell[i][j];
+
+          gg_canvas.fill (rgb[0]*Math.sin(j*0.01)*2, rgb[1]*2, rgb[2]*2);
+
+          // var f = d*0.001;
+          // d = 0;
+          // var offset = new gg_util.Vec2 (gg_perlin.simplex2(i*f,j*f), gg_perlin.simplex2(i*0.02,j*0.02+100)).scale(0.08).scale(d);
+
+          var offset = new gg_util.Vec2(0,0);//new gg_util.dir(center, new gg_util.Vec2(Math.sin(i*0.2)*0.02,j*0.2+4)).scale(cell[i][j]).scale(0.6);
+          context.fillRect(400+i, 50+j, offset.x*0.4+1, offset.y*0.2+0.4);//offset.x, offset.y);
+          //context.fillRect(400+i+offset.x*0, 50+j+offset.x*0, 1, 1);
+        }
+      }
+      text("kind of berlin")
+      // time += 0.01;
+      // requestAnimationFrame(draw);
+    }
+
+
+  </script>
+
+  <body id="body">
+
+  </body>
+
+</html>

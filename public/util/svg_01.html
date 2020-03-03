@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <script src="FileSaver.js"></script>
+  <script src="svg.js"></script>
+  <script src="gg_util_functions.js"></script>
+  <script src="gg_util_cellular.js"></script>
+
+  <script>
+
+    window.onload = init;
+
+    var svg;
+    var time = 0;
+    var elems = [];
+    var N = 150;
+    var M = 10;
+
+
+    class Color {
+      constructor(r,g,b,a=1) {
+          this.r = r;
+          this.g = g;
+          this.b = b;
+          this.a = a;
+      }
+
+      blend (c, t) {
+        return new Color(blend(c.r, this.r, t), blend(c.g, this.g, t), blend(c.b, this.b, t));
+      }
+
+      toString() {
+        return "rgba("+this.r+","+this.g+","+this.b+","+this.a+")";
+      }
+    }
+
+
+    function init() {
+      svg = new Svg(document.getElementById("svg"));
+      svg.fill("#000");
+      svg.rect(0,0,2000,1500);
+
+
+      svg.fill("none");
+
+
+      for (var i=0; i<N; i++) {
+        elems[i] = [];
+
+        for (var j=0; j<M; j++) {
+          var b = 40*j;
+
+          var col = new Color(0,0,0, 0.7);
+          if (j%3==1) col.r = 255;
+          if (j%3==2) col.g = 255;
+          if (j%3==0) col.b = 255;
+          svg.stroke(col.toString());
+
+          //var c = svg.circle ((i%N)*30*(1)+40, j*30+40, 9);
+          var c = svg.poly (1000, 740+j, i*40, [1,1,1,1]);
+           c.rotate (Math.PI/4);
+          // var s = Math.sin(i/N*Math.PI);
+          // s = 1;
+
+          elems[i][j] = c;
+        }
+      }
+
+
+      draw();
+    }
+
+
+    function draw() {
+
+      for (var i=0; i<N; i++) {
+        for (var j=0; j<M; j++) {
+
+
+          // elems[i][j].rotate(0.1*time+i*0.003+1.74+j*time*0.001);
+          // var scx = 0.1;
+          // // var yy = Math.abs(cell_noise.value(i/N*scx, time*0.01, 0) - cell_noise.value(i/N*scx, time*0.01, 1))*500+20;
+          // // sc = Math.abs(j-yy)*0.05;
+          // // if (sc>5) sc=5;
+          // var sc = Math.sin(time*0.1+i*0.02);
+          // elems[i][j].scale(sc, sc)
+          // elems[i][j].rotate(Math.sin(time*0.05+i*0.1))
+        }
+      }
+
+
+      if (time==0) {
+        // var blob = new Blob([document.getElementById("container").innerHTML]);
+        // saveAs(blob, "svg.svg");
+      }
+      time += 0.1;
+      requestAnimationFrame(draw);
+    }
+
+
+  </script>
+</head>
+<body>
+
+<div id="container">
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="1400px" id="svg">
+    <defs>
+      <filter id="B4" x="0px" width="100%" y="0px" height="1400px">
+        <feOffset in="SourceGraphic" result="pre-red" dx="-70" dy="-120"/>
+        <feColorMatrix in="pre-red" type="matrix" result="red" values="0 0 0 0 1
+                                                         0 0 0 0 0
+                                                         0 0 0 0 0
+                                                         0 0 0 1 0"/>
+
+        <feOffset in="SourceGraphic" result="pre-blue" dx="70" dy="-120"/>
+        <feColorMatrix in="pre-blue" type="matrix" result="blue" values="0 0 0 0 0
+                                                         0 0 0 0 0
+                                                         0 0 0 0 1
+                                                         0 0 0 1 0"/>
+        <feBlend mode="screen" in="red" in2="blue" result="main"/>
+        <feBlend mode="screen" in="main" in2="SourceGraphic"/>
+      </filter>
+    </defs>
+  </svg>
+</div>
+
+</body>
+</html>

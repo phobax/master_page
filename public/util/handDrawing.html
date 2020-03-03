@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+
+  <script src="gg_util.js"></script>
+  <script src="gg_perlin.js"></script>
+  <script src="gg_canvas.js"></script>
+  <script src="gg_drawing.js"></script>
+  <script src="wolkenburg_outline.js"></script>
+
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+  </style>
+  <script>
+
+
+    var context;
+    window.onload = init;
+    var time = 0;
+
+    function init() {
+      context = gg_canvas.createCanvas(document.getElementById("body"), 2000, 1000);
+      gg_drawing.init(context);
+      draw();
+    }
+
+    function draw() {
+      context.fillRect(0,0,2000,1000);
+      context.lineWidth = 1;
+
+      gg_drawing.humanLine (new gg_util.Point(400,300), new gg_util.Point(1400,300), 500);
+      gg_drawing.humanLine (new gg_util.Point(400,600), new gg_util.Point(1400,600), 100);
+
+      var parser = new DOMParser();
+      var svg = parser.parseFromString (svg_outline, "image/svg+xml");
+      for (var layer of svg.children) {
+
+        for (var elem of layer.children) {
+          console.log(elem);
+        }
+      }
+
+      time += 0.01;
+      requestAnimationFrame(draw);
+      // var svg = document.getElementById("svg");
+      // console.log(svg.children);
+
+    }
+
+
+  </script>
+
+  <img src="wolkenburg_outline.svg" id="svg" style="display:none">
+  <body id="body">
+
+  </body>
+
+</html>

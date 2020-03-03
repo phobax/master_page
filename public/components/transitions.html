@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+
+
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+  </style>
+
+<script>function x() {console.log("x");}</script>
+  <script type="module">
+
+
+
+    import {Color} from "/util/gg_util.js";
+    import {GGAnimator, GGImage, Canvas, loadImage, generateImage, mixImages} from "/util/gg_canvas.js";
+    import {Drawer} from "/util/gg_drawing.js";
+    import {CellNoise} from "/util/gg_cellular.js"
+
+
+    var canvas, context;
+    var img0, img1, imgMix;
+    var cellNoise = new CellNoise(10,50);
+    var animator = new GGAnimator (draw);
+
+    window.onload = init;
+
+
+
+    function init() {
+      canvas = new Canvas(document.getElementById("body"), 2000, 1000);
+      context = canvas.context;
+      var drawer = new Drawer();
+
+      Promise.all ([loadImage(context, "/assets/feldberg.png"), loadImage(context, "/assets/random-mesh.png")])
+      .then (ret=>{
+        img0 = ret[0];
+        img1 = ret[1];
+        animator.draw();
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    }
+
+    var imgGen      = new GGImage (null, 1024, 780);
+    var targetImage = new GGImage (null, 1024, 780);
+    var t = 0;
+
+    function mix0 (img0, img1, i, j) {
+      return img0.getPixel(i*2,j*2).add(img1.getPixel(i,j).scale(0.2));
+    }
+
+    function mix1 (img0, img1, i, j) {
+      var p1 = img1.getPixel(i,j+(t|0));
+      return img0.getPixel(i*2+p1.r,j*2+p1.r);
+    }
+
+    function gen0 (i,j) {
+      return new Color(gg_random.rand256((j+t)/8),gg_random.rand256((j*t)/8),gg_random.rand256(j/8))
+    }
+
+    function gen1 (i,j) {
+
+      var v = cellNoise.values(i,j)[1]-cellNoise.values(i,j)[0];
+      var x = v;//(v[0]-v[1])*3000;
+      return new Color(x,x,x);
+    }
+
+    function filter0 (img, i, j) {
+      var ii = 0 | (i+Math.sin(i*0.04+t)*14);
+      if (ii<0) ii=0;
+      if (ii>img.w-1) ii = img.w-1;
+      var jj = 0 | (j+Math.sin(j*0.04+t)*4);
+      if (jj<0) jj=0;
+      if (jj>img.h-1) jj = img.h-1;
+      return img.getPixel(ii,jj);
+    }
+
+    function draw() {
+
+      canvas.fill(0,0,0);
+      context.fillRect(0,0,2000,1000);
+
+      cellNoise.update(0.1);
+      generateImage (imgGen, gen1);
+
+
+      mixImages(targetImage, img0, imgGen, mix1);
+      // gg_canvas.filterImage(targetImage, imgGen, filter0);
+      context.putImageData(targetImage.imageData, 0, 0);
+      //context.putImageData(imgGen.imageData, 0, 0);
+
+      t += 0.3;
+    }
+
+
+  </script>
+
+  <body id="body">
+
+  </body>
+
+</html>

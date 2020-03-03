@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+
+  <script src="gg_util.js"></script>
+  <script src="gg_canvas.js"></script>
+  <script src="gg_drawing.js"></script>
+
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+  </style>
+  <script>
+
+
+    var context;
+    window.onload = init;
+    var time = 0;
+    var Point = gg_util.Point;
+    var Polygon = gg_util.Polygon;
+
+    function init() {
+      context = gg_canvas.createCanvas(document.getElementById("body"), 2000, 1000);
+      gg_drawing.init(context);
+      gg_canvas.setStrokeColor(255,0,0);
+      draw();
+    }
+
+
+    var p = new Point (500,150);
+    var polygon1 = new Polygon ([
+      new Point(100, 50),
+      new Point(100, 200),
+      new Point(150, 250),
+      new Point(150, 200),
+      new Point(200, 100)
+    ]);
+
+    var t = 0;
+
+
+    function draw() {
+
+
+      context.fillStyle = "#000";
+      context.fillRect(0,0,2000,1000);
+      context.lineWidth = 1;
+
+
+      p.x = Math.sin(t)*100+220;
+      p.y = Math.cos(t)*100+150;
+      t += 0.02;
+      gg_drawing.drawPolygon(polygon1);
+
+      if (polygon1.isInside(p))
+        context.fillStyle = "#88ffaa";
+      else
+        context.fillStyle = "#cc00aa";
+
+      context.fillRect(p.x, p.y, 5, 5);
+
+      requestAnimationFrame(draw);
+    }
+
+
+
+
+
+  </script>
+
+
+  <body id="body">
+
+  </body>
+
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+
+  <script src="gg_util.js"></script>
+  <script src="gg_canvas.js"></script>
+  <script src="gg_drawing.js"></script>
+
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+  </style>
+
+  <script>
+
+
+  class Block extends gg_util.Polygon {
+    constructor(x,y,w,h,age=-1) {
+      super([
+        new gg_util.Point (x, y),
+        new gg_util.Point (x+w, y),
+        new gg_util.Point (x+w, y+h),
+        new gg_util.Point (x, y+h)
+      ]);
+      this.age = age+1;
+      this.x = Math.round(x);
+      this.y = Math.round(y);
+      this.w = Math.round(w);
+      this.h = Math.round(h);
+      this.ratio = this.w / this.h;
+      this.color = new gg_canvas.Color(this.x*2-450,255,0);
+
+      this.center = new gg_util.Point(this.x+this.w/2, this.y+this.h/2);
+    }
+
+    draw (context) {
+      gg_canvas.setStrokeColor(this.color);
+      context.strokeRect(this.x, this.y, this.w, this.h);
+    }
+
+
+
+    split () {
+      if (Math.random()<0.5 || this.ratio>3) {
+        return [new Block(this.x, this.y, Math.round(this.w/2), this.h, this.age), new Block(this.x+Math.round(this.w/2), this.y, Math.round(this.w/2), this.h, this.age)];
+      }
+      else {
+        return [new Block(this.x, this.y, this.w, Math.round(this.h/2), this.age), new Block(this.x, this.y+Math.round(this.h/2), this.w, Math.round(this.h/2), this.age)];
+      }
+    }
+  }
+
+
+    var context;
+    window.onload = init;
+    var time = 0;
+    var blocks = [new Block(50,50,700,700)];
+
+    var Point = gg_util.Point;
+    var Polygon = gg_util.Polygon;
+
+    function init() {
+      context = gg_canvas.createCanvas(document.getElementById("body"), 2000, 1000);
+      gg_drawing.init(context);
+      gg_canvas.setStrokeColor(255,0,0);
+
+      draw();
+    }
+
+
+    var p = new Point (500,150);
+    var polygon1 = new Polygon ([
+      new Point(100, 50),
+      new Point(400, 120),
+      new Point(550, 250),
+      new Point(250, 400),
+      new Point(200, 100)
+    ]);
+
+    var t = 0;
+    var cnt = 0;
+
+    function draw() {
+
+
+      context.fillStyle = "#000";
+      context.fillRect(0,0,2000,1000);
+      context.lineWidth = 1;
+
+
+      p.x = Math.sin(t)*100+220;
+      p.y = Math.cos(t)*100+150;
+      t += 0.02;
+      gg_drawing.drawPolygon(polygon1);
+
+      if (polygon1.isInside(p))
+        context.fillStyle = "#88ffaa";
+      else
+        context.fillStyle = "#cc00aa";
+
+      context.fillRect(p.x, p.y, 5, 5);
+
+      if (blocks.length<1000) {
+        var _blocks = [];
+
+        for (var block of blocks) {
+          if ((cnt%1)==0 && Math.random()<(1/block.age*0.3) && block.age<20) {
+            var split = block.split();
+            for (b of split) {
+              //if (true) {
+              if (polygon1.overlaps(b)) {
+                _blocks.push(b);
+              }
+              else {
+                var split2 = b.split();
+                for (b2 of split2) {
+                  if (polygon1.overlaps(b2))
+                    _blocks.push(b2)
+                }
+              }
+            }
+          }
+          else {
+            _blocks.push(block);
+          }
+        }
+
+        cnt += 1;
+        blocks = _blocks;
+      }
+
+      for (var block of blocks) {
+        block.draw(context);
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+
+
+
+
+  </script>
+
+
+  <body id="body">
+
+  </body>
+
+</html>

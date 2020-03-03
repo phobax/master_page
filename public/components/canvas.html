@@ -3,11 +3,8 @@
 
   <body>
     <canvas id="myCanvas" width="400" height="400"></canvas>
-    <script type="text/javascript" src="gg_util_perlin.js"></script>
-    <script type="text/javascript" src="gg_util_functions.js"></script>
 
     <script>
-
 
 		var canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth;
@@ -67,10 +64,7 @@
           var f = 0.02;
           var f2 = 0.04;
 
-
           // calc height in range 0..1
-
-
           context.fillRect(x, y, w, h);
         }
       }
@@ -95,7 +89,6 @@
           y : 255,
           z : 255
         }
-
 
         setColor(color1.x, color1.y, color1.z);
         context.fillRect(i*20,0,20,canvas.height);

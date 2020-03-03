@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+
+  <script src="gg_canvas.js"></script>
+  <script>
+
+    var context;
+    window.onload = init;
+
+    function init() {
+      context = gg_canvas.createCanvas(document.getElementById("body"), 1000, 1000);
+      console.log(context);
+      draw();
+    }
+
+    function draw() {
+      context.fillRect(0,0,1000,1000);
+    }
+
+
+  </script>
+
+  <body id="body">
+
+  </body>
+
+</html>

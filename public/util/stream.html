@@ -1,0 +1,66 @@
+<head>
+<style media="screen">
+
+  body {
+    padding:0px;
+    margin:0px;
+    overflow:hidden;
+  }
+  .stream_img {
+    width: 100%;
+  }
+
+  .fullscreen:-webkit-full-screen {
+        width: auto !important;
+        height: auto !important;
+        margin:auto !important;
+  }
+  .fullscreen:-moz-full-screen {
+        width: auto !important;
+        height: auto !important;
+        margin:auto !important;
+  }
+  .fullscreen:-ms-fullscreen {
+        width: auto !important;
+        height: auto !important;
+        margin:auto !important;
+  }
+</style>
+
+<script>
+
+    function makeFullScreen (id) {
+      var divObj = document.getElementById(id);
+        //Use the specification method before using prefixed versions
+        if (divObj.requestFullscreen) {
+          divObj.requestFullscreen();
+        }
+        else if (divObj.msRequestFullscreen) {
+          divObj.msRequestFullscreen();
+        }
+        else if (divObj.mozRequestFullScreen) {
+          divObj.mozRequestFullScreen();
+        }
+        else if (divObj.webkitRequestFullscreen) {
+          divObj.webkitRequestFullscreen();
+        } else {
+          console.log("Fullscreen API is not supported");
+        }
+      }
+
+  window.onload = function() {
+    document.getElementById("stream").addEventListener("click", ()=>{
+      makeFullScreen("stream");
+    });
+
+  }
+</script>
+
+
+</head>
+
+<html>
+  <body>
+    <img class="stream_img" id="stream" src="http://131.173.8.23/mjpg/video.mjpg?camera=1&amp;timestamp=1563188739369" border="0">
+  </body>
+</html>
