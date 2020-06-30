@@ -15,7 +15,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "express-session": "^1.15.6",
     "socket.io-client": "^2.2.0",
     "socketio": "^1.0.0",
